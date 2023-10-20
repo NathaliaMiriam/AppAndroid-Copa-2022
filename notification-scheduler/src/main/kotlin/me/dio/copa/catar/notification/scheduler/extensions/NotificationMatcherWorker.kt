@@ -13,12 +13,14 @@ import me.dio.copa.catar.domain.model.MatchDomain
 import java.time.Duration
 import java.time.LocalDateTime
 
+// essa classe realiza o agendamento das notificações
+
 private const val NOTIFICATION_TITLE_KEY = "NOTIFICATION_TITLE_KEY"
 private const val NOTIFICATION_CONTENT_KEY = "NOTIFICATION_CONTENT_KEY"
 
 class NotificationMatcherWorker(
-    private val context: Context,
-    workerParams: WorkerParameters,
+    private val context: Context, workerParams: WorkerParameters,
+    // recebe o título e o conteúdo da notificação
 ) : Worker(context, workerParams) {
     override fun doWork(): Result {
         val title = inputData.getString(NOTIFICATION_TITLE_KEY)
@@ -26,11 +28,12 @@ class NotificationMatcherWorker(
         val content = inputData.getString(NOTIFICATION_CONTENT_KEY)
             ?: throw IllegalArgumentException("content is required")
 
-        context.showNotification(title, content)
+        context.showNotification(title, content) // mostra a notificação
 
         return Result.success()
     }
 
+    // agenda a notificação e cancela a notificação sobre o início do jogo
     companion object {
         fun start(context: Context, match: MatchDomain) {
             val (id, _, _, team1, team2, matchDate) = match

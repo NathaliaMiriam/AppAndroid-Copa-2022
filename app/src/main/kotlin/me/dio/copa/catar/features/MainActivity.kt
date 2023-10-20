@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
                     NotificationMatcherWorker.cancel(applicationContext, action.match)
                 is MainUiAction.EnableNotification ->
                     NotificationMatcherWorker.start(applicationContext, action.match)
+                else -> {}
             }
         }
     }

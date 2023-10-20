@@ -46,13 +46,16 @@ class MainViewModel @Inject constructor(
             }
     }
 
+    // fun que troca de habilitada p desabilitada e vice-versa a notificação de início do jogo
     fun toggleNotification(match: Match) {
         viewModelScope.launch {
-            runCatching {
+            runCatching { // permite que a aplicação não quebre/feche sozinha caso aconteça algum erro
                 withContext(Dispatchers.Main) {
+                    // se estiver habilitada, desabilita ...
                     val action = if (match.notificationEnabled) {
                         disableNotificationUseCase(match.id)
                         MainUiAction.DisableNotification(match)
+                        // se não, se estiver desabilitada, habilita
                     } else {
                         enableNotificationUseCase(match.id)
                         MainUiAction.EnableNotification(match)

@@ -60,7 +60,7 @@ fun MatchInfo(match: MatchDomain, onNotificationClick: NotificationOnClick) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Box {
-            // coloca e edita a imagem do card ... a imagem vêm de um json criado pela DIO
+            // coloca e edita a imagem do card ... a imagem vêm de um json criado pela DIO q simula uma API, está no GitHub
             AsyncImage(
                 model = match.stadium.image,
                 contentDescription = null,
