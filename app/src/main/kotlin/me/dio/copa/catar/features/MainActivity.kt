@@ -14,6 +14,7 @@ import me.dio.copa.catar.ui.theme.Copa2022Theme
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    // dentro de 'viewModels' eu passo o viewModel que eu quero (MainViewModel)
     private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Copa2022Theme {
                 val state by viewModel.state.collectAsState()
-                MainScreen(matches = state.matches, viewModel::toggleNotification)
+                MainScreen(matches = state.matches, viewModel::toggleNotification) // chama a classe que faz o desenho/corpo da tela
             }
         }
     }

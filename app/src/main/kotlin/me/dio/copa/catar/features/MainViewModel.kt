@@ -28,10 +28,11 @@ class MainViewModel @Inject constructor(
         fetchMatches()
     }
 
-    private fun fetchMatches() = viewModelScope.launch {
+    // busca e devolve as matches (partidas) no viewModel, consumindo o GetMatchesUseCase
+    private fun fetchMatches() = viewModelScope.launch { // 'viewModelScope' é p o uso de Coroutines
         getMatchesUseCase()
             .flowOn(Dispatchers.Main)
-            .catch {
+            .catch { // captura qualquer excessão que houver
                 when(it) {
                     is NotFoundException ->
                         sendAction(MainUiAction.MatchesNotFound(it.message ?: "Erro sem mensagem"))
@@ -64,10 +65,12 @@ class MainViewModel @Inject constructor(
     }
 }
 
+// mostra a lista - sendo que, o estado inicial é uma lista vazia -> emptyList()
 data class MainUiState(
     val matches: List<MatchDomain> = emptyList()
 )
 
+// classe selada, com as coisas que podem acontecer como: erros, notificação habilitada ou desabilitada...
 sealed interface MainUiAction {
     object Unexpected: MainUiAction
     data class MatchesNotFound(val message: String) : MainUiAction

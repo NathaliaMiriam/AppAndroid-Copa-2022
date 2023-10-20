@@ -32,8 +32,11 @@ import me.dio.copa.catar.domain.model.MatchDomain
 import me.dio.copa.catar.domain.model.TeamDomain
 import me.dio.copa.catar.ui.theme.Shapes
 
+// essa classe desenha, dá corpo para a tela
+
 typealias NotificationOnClick = (match: MatchDomain) -> Unit
 
+// recebe a lista de matches (partidas)
 @Composable
 fun MainScreen(matches: List<MatchDomain>, onNotificationClick: NotificationOnClick) {
     Box(
@@ -41,7 +44,7 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationClick: NotificationOnCl
             .fillMaxSize()
             .padding(8.dp)
     ) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) { // coloca um espaçamento entre um card e outro
             items(matches) { match ->
                 MatchInfo(match, onNotificationClick)
             }
@@ -52,17 +55,19 @@ fun MainScreen(matches: List<MatchDomain>, onNotificationClick: NotificationOnCl
 @Composable
 fun MatchInfo(match: MatchDomain, onNotificationClick: NotificationOnClick) {
     Card(
+        // coloca a borda arredondada do card, pegando a tela completa na horizontal
         shape = Shapes.large,
         modifier = Modifier.fillMaxWidth()
     ) {
         Box {
+            // coloca e edita a imagem do card ... a imagem vêm de um json criado pela DIO
             AsyncImage(
                 model = match.stadium.image,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.height(160.dp)
             )
-
+            // coloca a coluna, com 3 linhas: p notificação, p título com data e horário, p times que irão jogar
             Column(modifier = Modifier.padding(16.dp)) {
                 Notification(match, onNotificationClick)
                 Title(match)
@@ -72,11 +77,12 @@ fun MatchInfo(match: MatchDomain, onNotificationClick: NotificationOnClick) {
     }
 }
 
+// fun que alinha as notificações
 @Composable
 fun Notification(match: MatchDomain, onClick: NotificationOnClick) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-        val drawable = if (match.notificationEnabled) R.drawable.ic_notifications_active
-        else R.drawable.ic_notifications
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) { // pega a linha toda e coloca a not. no fim dela
+        val drawable = if (match.notificationEnabled) R.drawable.ic_notifications_active // se a notificação estiver habilitada, pega o ícone de not. habilitada
+        else R.drawable.ic_notifications // se não, pega o ícone de not. desabilitada
 
         Image(
             painter = painterResource(id = drawable),
@@ -88,12 +94,15 @@ fun Notification(match: MatchDomain, onClick: NotificationOnClick) {
     }
 }
 
+// fun que alinha o título
 @Composable
 fun Title(match: MatchDomain) {
+    // linha alinhada horizontalmente
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
+        // texto
         Text(
             text = "${match.date.getDate()} - ${match.name}",
             style = MaterialTheme.typography.h6.copy(color = Color.White)
@@ -101,36 +110,44 @@ fun Title(match: MatchDomain) {
     }
 }
 
+// fun que alinha os times que irão jogar
 @Composable
 fun Teams(match: MatchDomain) {
+    // linhas alinhadas horizontalmente
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically, // essa linha foi colocada no centro e na vertical
     ) {
-        TeamItem(team = match.team1)
+        TeamItem(team = match.team1) // time 1
 
+        // alinha o caracter que fica entre os dois times, que simboliza o 'versos'
         Text(
             text = "X",
             modifier = Modifier.padding(end = 16.dp, start = 16.dp),
             style = MaterialTheme.typography.h6.copy(color = Color.White)
         )
 
-        TeamItem(team = match.team2)
+        TeamItem(team = match.team2) // time 2
     }
 }
 
+// fun que alinha as bandeiras dos países junto aos nomes dos times ...
+// classes que buscam e config. as bandeiras e os nomes dos times --> Team e MatchMapper
 @Composable
 fun TeamItem(team: TeamDomain) {
     Row(verticalAlignment = Alignment.CenterVertically) {
+        // alinha as bandeiras
         Text(
-            text = team.flag,
+            text = team.flag, // flag configurada na data class 'Team' em 'model'
             modifier = Modifier.align(Alignment.CenterVertically),
             style = MaterialTheme.typography.h3.copy(color = Color.White)
         )
 
+        // coloca um espaço entre as bandeiras e os nomes dos países
         Spacer(modifier = Modifier.size(16.dp))
 
+        // alinha os nomes dos países
         Text(
             text = team.displayName,
             textAlign = TextAlign.Center,
